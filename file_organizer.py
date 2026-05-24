@@ -1,5 +1,7 @@
 from pathlib import Path
-import shutil 
+import shutil
+import msvcrt
+
 
 SOURCE_DIR = Path(__file__).parent
 
@@ -30,6 +32,7 @@ def get_unique_path(file, destination):
         
     return unique_path
             
+files_moved = 0
 
 for file in SOURCE_DIR.iterdir():
     if not file.is_file() or file.name == "file_organizer.py":
@@ -46,6 +49,7 @@ for file in SOURCE_DIR.iterdir():
             try:
                 shutil.move(str(file), str(safe_path))
                 print(f"{file.name} moved to {category}/{extension_name}/")
+                files_moved += 1
                 moved = True
                 break
 
@@ -61,12 +65,15 @@ for file in SOURCE_DIR.iterdir():
         try:
             shutil.move(str(file), str(safe_path))
             print(f"{file.name} moved to Others/")
+            files_moved += 1
 
         except Exception as e:
             with open(SOURCE_DIR / "log.txt", "a") as log:
                 log.write(f"{e} error in {file.name}")
 
-
+print(f"{files_moved} files has been moved successfully!")
+print("Press any key to exit....")
+msvcrt.getch()
 
 
 
